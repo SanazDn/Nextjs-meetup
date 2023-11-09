@@ -32,15 +32,12 @@ function HomePage(props) {
 //   };
 // }
 
-export async function getStaticProps() {
-  // fetch data from an API
-  const client = await MongoClient.connect(
-    'mongodb+srv://sanaz142:Alast822@cluster0.pjwpe7q.mongodb.net/meetups?retryWrites=true&w=majority'
-  );
+export async function getServerSideProps(context) {
+  // Fetch data from an API
+  const client = await MongoClient.connect('mongodb+srv://sanaz142:Alast822@cluster0.pjwpe7q.mongodb.net/meetups?retryWrites=true&w=majority');
   const db = client.db();
 
   const meetupsCollection = db.collection('meetups');
-
   const meetups = await meetupsCollection.find().toArray();
 
   client.close();
@@ -54,8 +51,8 @@ export async function getStaticProps() {
         id: meetup._id.toString(),
       })),
     },
-    revalidate: 1,
   };
 }
+
 
 export default HomePage;
